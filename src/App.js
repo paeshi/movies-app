@@ -1,23 +1,40 @@
-import logo from './logo.svg';
+
 import './App.css';
+import getMovies from './services/movies-api';
+import { useEffect, useState } from 'react';
+import MovieCard from './components/MovieCard'
 
 function App() {
+
+const [appData, setAppData] = useState([]);
+
+const [card, setCard] = useState(false);
+
+useEffect(() => {
+  async function getAppData() {
+    const data = await getMovies();
+    setAppData(data.results)
+  }
+  getAppData();
+    }, [])
+
+function handleClick() {
+  console.log('clicked')
+}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>MOVIES NOW PLAYING</h1>
+      <h2 onMouseOver={handleClick} >{appData.map((movie => (
+        <MovieCard
+        key={movie.id}
+        img = {movie.poster_path}
+        
+        // title = {movie.original_title}
+        // overview = {movie.overview}
+        />
+      )))}
+        </h2>
     </div>
   );
 }
